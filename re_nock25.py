@@ -22,7 +22,7 @@ def UKtxt():
 
 tmp={}
 kiso_pattern=re.compile(r'^\{\{基礎情報.*?$(.*)^\}\}$',re.MULTILINE + re.VERBOSE + re.DOTALL)
-key_pattern =re.compile(r'^\|(.+?) = (?:(?:(.+?)(?=\n\||\n$))|(\n.+?)+?)',re.MULTILINE + re.VERBOSE + re.DOTALL)
+key_pattern =re.compile(r'^\|(.+?)\s*=\s*(?:(?:(.+?)(?=\n\||\n$))|(\n.+?)+?)',re.MULTILINE + re.VERBOSE + re.DOTALL)
 
 kiso=kiso_pattern.findall(UKtxt())
 sample=key_pattern.findall(kiso[0])
@@ -34,4 +34,4 @@ for key,value in tmp.items():
     #prin=('{0}: {1}')
     #wprin=prin.format(key,value)
 
-    print(key.replace(' ','')+':'+value)
+    print(key+':'+value)

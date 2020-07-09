@@ -23,7 +23,7 @@ def UKtxt():
 
 tmp={}
 kiso_pattern=re.compile(r'^\{\{基礎情報.*?$(.*)^\}\}$',re.MULTILINE + re.VERBOSE + re.DOTALL)
-key_pattern =re.compile(r'^\|(.+?) = (?:(?:(.+?)(?=\n\||\n$))|(\n.+?)+?)',re.MULTILINE + re.VERBOSE + re.DOTALL)
+key_pattern =re.compile(r'^\|(.+?)\s*=\s*(?:(?:(.+?)(?=\n\||\n$))|(\n.+?)+?)',re.MULTILINE + re.VERBOSE + re.DOTALL)
 mark_pattern =re.compile('\'{2,5}')
 
 kiso=kiso_pattern.findall(UKtxt())
@@ -34,4 +34,4 @@ for saline in sample:
         
 for key,value in tmp.items():
     #print(key,value)
-    print(key.replace(' ','')+':'+value)
+    print(key+':'+value)
