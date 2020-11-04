@@ -56,20 +56,22 @@ def k_chunk(i_path, j_path):    #kがある場合の抽出
         for j in j_path:
             if k==[]:
                 if i==j:        #一致するk
-                    k.append(j)
+                    k += [j]
                     break
-                j_k.append(j)#jからkの直前
+                j_k += [j]#jからkの直前
         if k==[]:
-            i_k.append(i)       #iからkの直前
+            i_k += [i]       #iからkの直前
+        else:
+            break
     return i_k,j_k,k
 
 def arrow(wordlist,abc):
     x=''
     for co,word in enumerate(wordlist):
-        if abc>1 and co==0:#先頭の名詞をxにして文字列に
-            x +='x'+''.join(word.morphs[word.judge:])
-        elif abc==3 and co==len(wordlist):#最後尾の名詞をyにして文字列に
+        if abc==3 and word==wordlist[-1]:#最後尾の名詞をyにして文字列に
             x +='y'+''.join(word.morphs[word.judge:])
+        elif abc>1 and co==0:#先頭の名詞をxにして文字列に
+            x +='x'+''.join(word.morphs[word.judge:])
         elif abc==1 and co==0:#先頭の名詞をyにして文字列に
             x +='y'+''.join(word.morphs[word.judge:])
         else:
@@ -108,7 +110,7 @@ with open('brain.cabocha.parset.txt',encoding='utf-8')as f:
                 chunks[chunk_id].judge +=1     #名詞判定
 
         elif chunks:                                       #EOS
-            chunk.append(chunks[chunk_id])  #文節ごとに追加するEOS手前のまとまり
+            #chunk.append(chunks[chunk_id])  #文節ごとに追加するEOS手前のまとまり
             document.append(chunk)         #まとめられたchunkが一文節づつはいる
             
             for chunk_id in range(len(chunks)):
@@ -116,19 +118,22 @@ with open('brain.cabocha.parset.txt',encoding='utf-8')as f:
                     chunks[chunks[chunk_id].dst].srcs.append(chunk_id)#係り受けの追加
             chunk = []
 
-for doc in document:    #ひとつづつ文節確認
-    for i,i_chunk in enumerate(doc):#doc=chunksの一つ
-        for j_chunk in doc[i+1:]:#i以降の文節
-            if i_chunk.judge==0 or j_chunk.judge==0:#両方名詞じゃない
-                continue
-            if i_chunk.dst==-1 or j_chunk.dst==-1:         #最初からdst-1ならスキップ
-                continue
-            i_path=root(i_chunk, chunks)#i_chunkのroot
-            
-            if in_j(i_path,j_chunk):        #根までにある場合
-                result=connect(i_path,j_chunk)#根にあるjまでのリスト
-                print(arrow(result,3))#矢印でつなぐ
-            else:
-                j_path=root(j_chunk, chunks)#j_chunkのroot
-                i,j,k=k_chunk(i_path,j_path)#i,j,kそれぞれの抽出
-                print(arrow(i,2),'|',arrow(j,1),'|',arrow(k,0))#矢印でつなぎながらそれぞれ｜でつなぐ
+            for doc in document:    #ひとつづつ文節確認
+                for i,i_chunk in enumerate(doc):#doc=chunksの一つ
+                    for j_chunk in doc[i+1:]:#i以降の文節
+                        if i_chunk.judge==0 or j_chunk.judge==0:#両方名詞じゃない
+                            continue
+                        if i_chunk.dst==-1 or j_chunk.dst==-1:         #最初からdst-1ならスキップ
+                            continue
+                        i_path=root(i_chunk, chunks)#i_chunkのroot
+                        
+                        if in_j(i_path,j_chunk):        #根までにある場合
+                            result=connect(i_path,j_chunk)#根にあるjまでのリスト
+                            print(arrow(result,3))#矢印でつなぐ
+                        else:
+                            j_path=root(j_chunk, chunks)#j_chunkのroot
+                            i,j,k=k_chunk(i_path,j_path)#i,j,kそれぞれの抽出
+                            
+                            #print(arrow(j,1))
+                            print(arrow(i,2),'|',arrow(j,1),'|',arrow(k,0))#矢印でつなぎながらそれぞれ｜でつなぐ
+            document=[]
