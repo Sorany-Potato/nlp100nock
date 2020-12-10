@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pickle
+import numpy as np
 def title(filename):
     file_path='./'+str(filename)
     data=pd.read_csv(file_path,header=None,sep='\t',names=['TITLE','CATEGORY'])
@@ -57,3 +58,7 @@ def estimation(clf,feature):
 def load_model():
     file_path='TF_model.sav'
     return pickle.load(open(file_path,'rb'))
+
+def score(lg,category):
+    est_score=np.max(lg.predict_proba(category),axis=1)
+    return est_score
