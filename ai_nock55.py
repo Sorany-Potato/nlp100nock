@@ -12,4 +12,6 @@ clf=ai_def.load_model()
 train_score=ai_def.estimation(clf,log['train_feature'])
 train_matrix = confusion_matrix(log['train_category'],train_score)
 print(train_matrix)
-
+test_score=ai_def.estimation(clf,log['test_feature'])
+test_matrix = confusion_matrix(log['test_category'],test_score)
+print(test_matrix)
