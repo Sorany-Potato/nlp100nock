@@ -21,17 +21,16 @@ def over(C,solver,class_weight):
     train_sc=ai_def.estimation(clf, log['train_feature'])
     valid_sc=ai_def.estimation(clf, log['valid_feature'])
     test_sc=ai_def.estimation(clf, log['test_feature'])
-    result=[]
     train_accuracy = accuracy_score(log['train_category'],train_sc)
     valid_accuracy = accuracy_score(log['valid_category'],valid_sc)
     test_accuracy = accuracy_score(log['test_category'],test_sc)
-
+    result=[]
     result.append([C,train_accuracy, valid_accuracy, test_accuracy])
     return result
 
 C=np.logspace(-5,4,10,base=10)
 class_weight=[None, 'balanced']
-solver=['newton-cg','lbfgs','libliner','sag','saga']
+solver=['newton-cg','lbfgs','liblinear','sag','saga']
 best_parameter=None
 best_score=None
 max_score=0
@@ -41,11 +40,11 @@ for c in C:
         for weight in class_weight:
             print(c, solve, weight)
             result=over(c,solve,weight)
-            if result[2] > max_score:
-                max_score=result[2]
+            if result[0][1] > max_score:
+                max_score=result[0][1]
                 best_parameter=[c,solve,weight]
                 best_score=result
-                ai_def.plot(result)
+                ai_def.plot(result[0])
 print(best_parameter)
 print(best_score)
-print(best_score[3])
+print(best_score[0][2])
