@@ -12,6 +12,6 @@ with open('questions-words.txt') as f:
     for line in f:
         word=line.split()
         if len(word)>=3:
-            word_sim=model.most_similar(positive=[word[0],word[2]],negative=[word[1]],topn=1)
+            word_sim=model.most_similar(positive=[word[1],word[2]],negative=[word[0]],topn=1)
             result.append([line,word_sim])
 print(result)
