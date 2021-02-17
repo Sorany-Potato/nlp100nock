@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import nn_def
 from sklearn.model_selection import train_test_split
 
@@ -12,7 +13,7 @@ def X_data(data):#Xの取得
             try:
                 vec.append(model[word])
             except:
-                ng+=1
+                vec.append(model['0'])
         if vec:
             result.append(sum(vec)/(len(vec)))
     return result
@@ -37,10 +38,10 @@ y_test=test_data.iloc[:,1].replace(L)
 y_test.to_csv('y_test.txt',header=False, index=False)
 
 x_train=X_data(train_data)
-#print(x_train)
+np.savetxt('x_train.txt',x_train)
 
 x_valid=X_data(valid_data)
-#print(x_valid)
+np.savetxt('x_valid.txt',x_valid)
 
 x_test=X_data(test_data)
-#print(x_test)
+np.savetxt('x_test.txt',x_test)
